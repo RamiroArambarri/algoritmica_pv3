@@ -2,8 +2,8 @@ const $canvas = $('canvas')
 const width = 1920;
 const height = 1080;
 
-$canvas.width = 1920;
-$canvas.height = 1080;
+$canvas.width = width;
+$canvas.height = height;
 
 const $video = document.createElement('video')
 $video.autoplay = true;
@@ -22,7 +22,11 @@ class MyShader {
         this.renderSource
     }
 
-    setUniform = (name, value) => {
+    setUniform = (type, name, value) => {
+        if (type != 'float' && type != 'vec2' && type != 'bool') {
+            console.log('Tipo de uniform inválido')
+            return;
+        }
         let selectedUniform
         this.uniforms.forEach(uniform => {
             if (name == uniform.name)
@@ -36,8 +40,17 @@ class MyShader {
             }
             this.uniforms.push(selectedUniform)
         }
-
-        this.gl.uniform1f(selectedUniform.location, value);
+        switch (type) {
+            case 'float':
+                this.gl.uniform1f(selectedUniform.location, value);
+                break;
+            case 'vec2':
+                console.log(value)
+                this.gl.uniform2f(selectedUniform.location, ...value);
+                break;
+            case 'bool':
+                this.gl.uniform1i(selectedUniform.location, value);
+        }
 
     }
 
@@ -181,9 +194,8 @@ const myShader = new MyShader()
 myShader.startShader();
 
 
-const mouse = { x: 0, y: 0 }
+let mouse = [0,0];
 
 document.addEventListener("mousemove", (ev) => {
-    mouse.x = ev.clientX;
-    mouse.y = ev.clientY;
+    mouse = [ev.clientX, ev.clientX];
 });
