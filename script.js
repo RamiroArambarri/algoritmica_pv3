@@ -57,7 +57,7 @@ class MyShader {
     startShader = async () => {
         initVideo()
 
-        this.renderSource = await fetch('render.Js').then(res => res.text())
+        this.renderSource = await fetch('render.js').then(res => res.text())
         this.fragBaseSource = await fetch('base.frag').then(res => res.text())
         this.fragSource = await fetch('shad.frag').then(res => res.text())
         this.vertSource = await fetch('shad.vert').then(res => res.text())
