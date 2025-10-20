@@ -45,7 +45,6 @@ class MyShader {
                 this.gl.uniform1f(selectedUniform.location, value);
                 break;
             case 'vec2':
-                console.log(value)
                 this.gl.uniform2f(selectedUniform.location, ...value);
                 break;
             case 'bool':
