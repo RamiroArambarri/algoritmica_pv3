@@ -20,10 +20,13 @@ class MyShader {
         this.uniforms = []
         this.camTex
         this.renderSource
+        this.vars = {}
+        this.interactive = new Interactive(this)
     }
 
+
     setUniform = (type, name, value) => {
-        if (type != 'float' && type != 'vec2' && type != 'bool') {
+        if (type != 'float' && type != 'vec2' && type != 'vec3' && type != 'bool') {
             console.log('Tipo de uniform inválido')
             return;
         }
@@ -45,8 +48,10 @@ class MyShader {
                 this.gl.uniform1f(selectedUniform.location, value);
                 break;
             case 'vec2':
-                console.log(value)
                 this.gl.uniform2f(selectedUniform.location, ...value);
+                break;
+            case 'vec3':
+                this.gl.uniform3f(selectedUniform.location, ...value);
                 break;
             case 'bool':
                 this.gl.uniform1i(selectedUniform.location, value);
@@ -57,7 +62,7 @@ class MyShader {
     startShader = async () => {
         initVideo()
 
-        this.renderSource = await fetch('render.Js').then(res => res.text())
+        this.renderSource = await fetch('render.js').then(res => res.text())
         this.fragBaseSource = await fetch('base.frag').then(res => res.text())
         this.fragSource = await fetch('shad.frag').then(res => res.text())
         this.vertSource = await fetch('shad.vert').then(res => res.text())
@@ -103,6 +108,12 @@ class MyShader {
     }
 
     render = () => {
+        this.interactive.eventListeners.forEach(eventListener => {
+            window.removeEventListener(eventListener.type, eventListener.callback)
+        })
+
+        this.interactive.eventListeners = []
+
         if ($video.readyState >= $video.HAVE_CURRENT_DATA) {
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.camTex);
             this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, $video);
@@ -187,15 +198,15 @@ const initVideo = async () => {
     }
 }
 
-
+const mouse = [0, 0];
 
 const myShader = new MyShader()
 
 myShader.startShader();
 
 
-let mouse = [0,0];
 
 document.addEventListener("mousemove", (ev) => {
-    mouse = [ev.clientX, ev.clientX];
+    mouse[0] = ev.clientX;
+    mouse[1] = ev.clientX;
 });
