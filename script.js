@@ -177,13 +177,22 @@ class MyShader {
     }
 
     setUpRender = (newRenderSource) => {
+        const originalLog = console.log
+        let messages = []
+        console.log = (message) => {
+            messages.push(message)
+            originalLog()
+        }
+
         try {
             eval(newRenderSource)
         } catch (error) {
-            return error
+            console.log = originalLog
+            return [-1, error]
         }
         myShader.renderSource = $jsInput.value
-        return 0;
+        console.log = originalLog
+        return [0, ...messages];
     }
 }
 

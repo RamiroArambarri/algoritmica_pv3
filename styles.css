@@ -16,7 +16,9 @@ canvas {
 }
 
 label {
-    color: white;    
+    display: block;
+    color: white;
+    margin:  0 0 .5rem;
 }
 
 #ui {
@@ -25,6 +27,7 @@ label {
     left: 10px;
     opacity: 0.5;
     display: none;
+    font-family: monospace;
 }
 
 #ui:hover {
@@ -42,11 +45,12 @@ label {
     background-color: rgba(0, 0, 0, 0);
     border: none;
     color: white;
+    font-family: monospace;
 }
 
 .code::selection {
     background-color: white;
-    color:black;
+    color: black;
 }
 
 #js-pannel {
@@ -58,3 +62,13 @@ label {
     max-width: 300px;
 }
 
+.ui-button {
+    color: white;
+    border: 2px solid #AAAAAA;
+    background-color: rgba(0, 0, 0, 0);
+    margin: .2rem;
+}
+
+.ui-button:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}

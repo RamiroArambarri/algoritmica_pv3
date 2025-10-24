@@ -13,16 +13,17 @@
 <body>
     <div id="ui">
         <div id="js-pannel">
-            <label for="js-input">.js</label><br>
-            <textarea name="js-input" id="js-input" class="code"></textarea>
+            <label for="js-input">.js</label>
+            <textarea name="js-input" id="js-input" class="code" spellcheck="false"></textarea>
         </div>
         <div id="frag-pannel">
-            <label for="js-input">.frag</label><br>
-            <textarea name=".frag" id="frag-input" class="code"></textarea>
+            <label for="js-input">.frag</label>
+            <textarea name=".frag" id="frag-input" class="code" spellcheck="false"></textarea>
         </div>
-        <input type="button" value=".js" id="js-button">
-        <input type="button" value=".frag" id="frag-button">
-        <input type="button" value="---&gt" id="compile-button"><br>
+        <input type="button" value=".js" id="js-button" class="ui-button">
+        <input type="button" value=".frag" id="frag-button" class="ui-button">
+        <input type="button" value="---&gt" id="compile-button" class="ui-button"><br>
+        <span id="messageLog"></span>
         <span id="errorLog"></span>
     </div>
     <canvas></canvas>

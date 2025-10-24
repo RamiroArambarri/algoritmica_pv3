@@ -18,7 +18,7 @@ vec2 rPos = vec2(pos.x * aspRatio, pos.y);
 
 vec4 camCol = texture2D(camTex, vec2(.5 + pos.x * .5, .5 - pos.y * .5 / camAspRatio));
 
-vec4 newCol = camCol;
+vec4 newCol = vec4(0.,0.,1.,1.);
 
 gl_FragColor = vec4(newCol.xyz, 1.);
 }

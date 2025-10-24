@@ -66,6 +66,54 @@ vec3 hsl2rgb(vec3 hsl) {
     return rgb;
 }
 
+vec4 rgb2hsl(vec4 c) {
+    float maxC = max(max(c.r, c.g), c.b);
+    float minC = min(min(c.r, c.g), c.b);
+    float delta = maxC - minC;
+
+    float h = 220.0 / 360.;
+    float s = 0.0;
+    float l = (maxC + minC) * 0.5;
+
+    if(delta > 0.00001) {
+        s = delta / (1.0 - abs(2.0 * l - 1.0));
+
+        if(maxC == c.r) {
+            h = mod((c.g - c.b) / delta, 6.0);
+        } else if(maxC == c.g) {
+            h = (c.b - c.r) / delta + 2.0;
+        } else {
+            h = (c.r - c.g) / delta + 4.0;
+        }
+
+        h /= 6.0;
+    }
+
+    return vec4(h, s, l, 1.);
+}
+
+vec4 hsl2rgb(vec4 hsl) {
+    vec3 rgb;
+
+    if(hsl.y == 0.0) {
+        rgb = vec3(hsl.z);
+    } else {
+        float f2;
+
+        if(hsl.z < 0.5)
+            f2 = hsl.z * (1.0 + hsl.y);
+        else
+            f2 = hsl.z + hsl.y - hsl.y * hsl.z;
+
+        float f1 = 2.0 * hsl.z - f2;
+
+        rgb.r = hue2rgb(f1, f2, hsl.x + (1.0 / 3.0));
+        rgb.g = hue2rgb(f1, f2, hsl.x);
+        rgb.b = hue2rgb(f1, f2, hsl.x - (1.0 / 3.0));
+    }
+    return vec4(rgb, 1.);
+}
+
 vec3 hsl2rgb(float h, float s, float l) {
     return hsl2rgb(vec3(h, s, l));
 }
@@ -148,4 +196,29 @@ float noise(vec3 P){
   vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
   float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
   return 2.2 * n_xyz;
+}
+
+float noise(float x, float y, float z) {
+    return noise(vec3(x, y, z));
+}
+
+float noise(float x, float y) {
+    return noise(vec3(x, y, 0.));
+}
+
+float noise(float x) {
+    return noise(vec3(x, 0, 0.));
+}
+
+
+//De Inigo Quilez
+float hash(float n) { return fract(sin(n)*43758.5453123); }
+
+float noise(vec2 x){
+    vec2 p = floor(x);
+    vec2 f = fract(x);
+    f = f*f*(3.0-2.0*f);
+    float n = p.x + p.y*57.0;
+    return mix(mix(hash(n+0.0), hash(n+1.0), f.x),
+               mix(hash(n+57.0), hash(n+58.0), f.x), f.y);
 }
